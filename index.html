@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wedding Promotion Special Offer - Parnas Hotel Collection</title>
+
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style>
+    :root {
+        --primary: #2c3e50;
+        --accent: #d33;
+        --bg-gray: #f7f9fb;
+        --border: #cfd6dd;
+        --text-main: #333;
+        --text-sub: #556677;
+    }
+
+    body {
+        font-family: 'Pretendard', sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: #F0F2F5;
+        color: var(--text-main);
+        display: flex;
+        justify-content: center;
+    }
+
+    .page-wrapper {
+        max-width: 900px;
+        width: 100%;
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    /* 상단 안내 */
+    .banner { width: 100%; border-radius: 10px; margin-bottom: 25px; overflow: hidden; }
+    .banner img { width: 100%; height: auto; display: block; }
+
+    .info-box { 
+        text-align: center; margin-bottom: 30px; padding: 20px; 
+        background: #fff; border: 1px solid var(--border); border-radius: 12px; 
+        line-height: 1.7; 
+    }
+    .info-head { font-size: 1.4em; font-weight: 800; color: var(--primary); margin-bottom: 10px; }
+    .info-item { margin: 5px 0; color: var(--text-sub); }
+    .info-sub { margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee; font-size: 0.92em; }
+
+    /* 공통 입력창 스타일 */
+    h2 { margin-top: 40px; font-size: 1.25em; border-left: 4px solid var(--primary); padding-left: 12px; color: var(--primary); }
+    label { display: block; font-weight: 600; margin: 18px 0 8px; }
+    label.required::after { content: " *"; color: var(--accent); }
+
+    input[type="text"], select {
+        width: 100%; padding: 12px 0; border: none; border-bottom: 1.5px solid #ddd;
+        font-size: 16px; transition: border-color 0.3s;
+    }
+    input[type="text"]:focus { outline: none; border-bottom-color: var(--primary); }
+
+    /* 상품 카테고리 및 가로 스크롤 */
+    .category-title { font-size: 1.1em; font-weight: 700; margin: 35px 0 15px; color: #111; display: flex; align-items: center; }
+    .category-title::before { content: ""; width: 8px; height: 8px; background: var(--primary); border-radius: 50%; margin-right: 8px; }
+
+    .product-list-wrapper { position: relative; margin-bottom: 10px; }
+    .product-list { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; -ms-overflow-style: none; }
+    .product-list::-webkit-scrollbar { display: none; }
+
+    .product-card { min-width: 170px; max-width: 170px; flex-shrink: 0; cursor: pointer; text-align: center; }
+    .img-container { 
+        width: 100%; aspect-ratio: 1/1; background: #f9f9f9; border-radius: 10px; 
+        overflow: hidden; margin-bottom: 10px; border: 2px solid transparent; transition: 0.2s;
+    }
+    .img-container img { width: 100%; height: 100%; object-fit: cover; }
+    .product-card.active .img-container { border-color: var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .product-card-title { font-size: 0.95em; font-weight: 600; margin-bottom: 4px; color: #222; }
+
+    /* 상세 영역 (레퍼런스 스타일) */
+    .detail-container { 
+        display: none; background: #fdfdfd; border: 1px solid var(--border); 
+        border-radius: 12px; padding: 20px; margin-top: 15px; animation: slideDown 0.3s ease; 
+    }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .split-layout { display: flex; gap: 25px; }
+    .detail-left { flex: 1.2; }
+    .detail-right { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+
+    .main-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #eee; }
+    .thumb-list { display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; }
+    .thumb-img { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; cursor: pointer; opacity: 0.5; border: 1px solid transparent; }
+    .thumb-img.active { opacity: 1; border-color: var(--primary); }
+
+    .dtl-title { font-size: 1.3em; font-weight: 700; margin: 0 0 10px; color: var(--primary); }
+    .dtl-desc { font-size: 0.92em; color: var(--text-sub); line-height: 1.6; margin-bottom: 15px; }
+    
+    .option-box { background: var(--bg-gray); padding: 15px; border-radius: 10px; border: 1px solid #eee; }
+    .qty-price-row { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
+    .qty-stepper { display: flex; align-items: center; gap: 5px; }
+    .qty-btn { width: 30px; height: 30px; border: 1px solid #ccc; background: #fff; border-radius: 5px; cursor: pointer; }
+    .qty-input { width: 45px; text-align: center; border: 1px solid #ccc; padding: 5px 0; border-radius: 5px; font-weight: bold; }
+
+    .btn-add-cart { 
+        width: 100%; padding: 15px; background: var(--primary); color: #fff; 
+        border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 15px;
+    }
+
+    /* 장바구니 리스트 */
+    .cart-area { margin-top: 40px; background: var(--bg-gray); padding: 20px; border-radius: 12px; }
+    .cart-item { 
+        display: flex; justify-content: space-between; align-items: center; 
+        padding: 12px; background: #fff; border-radius: 8px; margin-bottom: 10px; border: 1px solid #eef;
+    }
+    .cart-item-title { font-weight: 600; font-size: 0.95em; }
+    .cart-item-price { font-weight: 700; color: var(--primary); }
+    .btn-delete { background: none; border: none; color: var(--accent); cursor: pointer; font-size: 1.2em; }
+
+    .total-box { 
+        margin-top: 15px; padding: 18px; background: var(--primary); color: #fff; 
+        border-radius: 10px; display: flex; justify-content: space-between; font-size: 1.15em; font-weight: 700;
+    }
+
+    /* 결제 및 배송 정보 */
+    .pay-highlight { margin-top: 12px; padding: 15px; background: #fff3f3; border: 1px solid #fcc; border-radius: 10px; font-size: 0.92em; }
+    
+    .consent-box { margin-top: 30px; padding: 20px; background: var(--bg-gray); border-radius: 12px; font-size: 0.88em; line-height: 1.6; }
+    .consent-check { display: flex; gap: 10px; align-items: center; margin-top: 10px; font-weight: 700; color: var(--primary); }
+
+    button[type="submit"] {
+        width: 100%; padding: 18px; background: #111; color: #fff; border: none;
+        border-radius: 10px; margin-top: 30px; font-size: 1.1em; font-weight: 800; cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+        .split-layout { flex-direction: column; }
+        .page-wrapper { padding: 20px; }
+    }
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+    <div class="banner">
+        <img src="https://via.placeholder.com/1000x300/2c3e50/ffffff?text=Wedding+Promotion+Special+Offer" alt="Parnas Hotel Collection">
+    </div>
+
+    <div class="info-box">
+        <div class="info-head">Parnas Hotel Collection</div>
+        <div class="info-item"><strong>Wedding Promotion Special Offer</strong></div>
+        <div class="info-item">기간: ~ 26. 12. 31. (계약일 기준)</div>
+        <div class="info-item">문의: <a href="mailto:newbiz@parnas.co.kr">newbiz@parnas.co.kr</a></div>
+        <div class="info-sub">
+            주문서를 제출하시면 담당 매니저 확인 후 결제 링크를 발송해 드립니다.<br>
+            결제 완료 후 영업일 기준 순차 배송됩니다.
+        </div>
+    </div>
+
+    <form id="orderForm" name="wedding-special-offer" method="POST" data-netlify="true" action="/thanks/" onsubmit="return validateForm();">
+        <input type="hidden" name="form-name" value="wedding-special-offer" />
+        
+        <h2>1. 주문자 정보</h2>
+        <label class="required">연회세일즈 담당 매니저</label>
+        <input type="text" name="담당 매니저" placeholder="예: 홍길동 매니저" required>
+
+        <label class="required">주문자 이름 (신랑/신부님)</label>
+        <input type="text" name="주문자 이름" placeholder="예: 홍길동" required>
+
+        <h2>2. 상품 선택 (Special Offer)</h2>
+        <div id="shopGallery"></div>
+
+        <div class="cart-area">
+            <h3 style="margin-top:0; font-size:1.1em;">🛒 선택한 상품 내역</h3>
+            <div id="cartList"><p style="color:#888;">상품을 선택하여 담아주세요.</p></div>
+            <div class="total-box">
+                <span>최종 결제 예정 금액</span>
+                <span><span id="grandTotal">0</span>원</span>
+            </div>
+        </div>
+
+        <h2>3. 배송 및 결제 정보</h2>
+        <label class="required">수취인 이름</label>
+        <input type="text" name="수취인 이름" placeholder="예: 홍길동" required>
+
+        <label class="required">수취인 전화번호</label>
+        <input type="text" name="수취인 전화번호" class="phone-input" placeholder="숫자만 입력" required>
+
+        <label class="required">수취인 주소</label>
+        <input type="text" name="수취인 주소" placeholder="예: 서울시 강남구 테헤란로 521" required>
+
+        <div class="pay-highlight">
+            카드 결제 링크는 위 수취인 연락처(또는 주문자)로 발송됩니다.<br>
+            <strong>결제 확인 후 배송이 시작됩니다.</strong>
+        </div>
+
+        <div class="consent-box">
+            <div style="font-weight:700; margin-bottom:10px;">[필수] 개인정보 수집 및 제공 동의</div>
+            개인정보 수집 항목: 이름, 연락처, 주소<br>
+            보유 및 이용 기간: 배송 완료 후 1개월 이내 폐기<br>
+            제공받는 자: 물플 (배송 대행)
+            <div class="consent-check">
+                <input type="checkbox" id="agree" required>
+                <label for="agree" style="margin:0;">내용을 확인했으며 동의합니다.</label>
+            </div>
+        </div>
+
+        <input type="hidden" name="주문 요약" id="orderSummary">
+        <input type="hidden" name="총 결제금액" id="orderTotal">
+        <button type="submit">주문서 제출하기</button>
+    </form>
+</div>
+
+<div id="detailTemplate" class="detail-container">
+    <div class="split-layout">
+        <div class="detail-left">
+            <img id="dtlMainImg" class="main-img" src="" alt="상품이미지">
+            <div id="dtlThumbList" class="thumb-list"></div>
+        </div>
+        <div class="detail-right">
+            <div>
+                <h3 id="dtlTitle" class="dtl-title">상품명</h3>
+                <div id="dtlDesc" class="dtl-desc">설명</div>
+                <div class="option-box">
+                    <label id="dtlOptLabel" style="margin-top:0; font-size:0.9em;">옵션/사이즈 선택</label>
+                    <select id="dtlOptSelect"></select>
+                    <div class="qty-price-row">
+                        <div class="qty-stepper">
+                            <button type="button" class="qty-btn" onclick="changeQty(-1)">-</button>
+                            <input type="number" id="dtlQty" class="qty-input" value="1" min="1">
+                            <button type="button" class="qty-btn" onclick="changeQty(1)">+</button>
+                        </div>
+                        <div style="font-weight:800; font-size:1.2em;"><span id="dtlSubTotal">0</span>원</div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn-add-cart" onclick="addToCart()">장바구니 담기</button>
+        </div>
+    </div>
+</div>
+
+<script>
+/* =========================================================
+   1. 데이터 설정 (웨딩 프로모션 카테고리별 구성)
+========================================================= */
+const shopData = [
+    {
+        category: "Wedding Special Package (40% OFF)",
+        items: [
+            {
+                id: "wed_full", name: "[40%] 베딩&배스웨어 풀세트",
+                desc: "이불세트 1 + 베개세트 2 + 배스로브 2 + 타월세트 2 구성",
+                options: [
+                    { optName: "King 사이즈", price: 1862400, images: ["https://via.placeholder.com/600/eee/2c3e50?text=FullSet_King_1", "https://via.placeholder.com/600/ddd/2c3e50?text=FullSet_King_2"] },
+                    { optName: "Queen 사이즈", price: 1820400, images: ["https://via.placeholder.com/600/eee/2c3e50?text=FullSet_Queen_1"] },
+                    { optName: "Single 사이즈", price: 1652400, images: ["https://via.placeholder.com/600/eee/2c3e50?text=FullSet_Single_1"] }
+                ]
+            },
+            {
+                id: "wed_bedding", name: "[40%] 구스다운 베딩 세트",
+                desc: "구스다운 이불 1 + 구스다운 베개 2 + 커버 세트",
+                options: [
+                    { optName: "King 사이즈", price: 1524000, images: ["https://via.placeholder.com/600/f9f9f9/2c3e50?text=Bedding_King"] },
+                    { optName: "Queen 사이즈", price: 1482000, images: ["https://via.placeholder.com/600/f9f9f9/2c3e50?text=Bedding_Queen"] },
+                    { optName: "Single 사이즈", price: 1314000, images: ["https://via.placeholder.com/600/f9f9f9/2c3e50?text=Bedding_Single"] }
+                ]
+            }
+        ]
+    },
+    {
+        category: "Premium Bathwear (30% OFF)",
+        items: [
+            {
+                id: "bath_set", name: "[30%] 배스웨어 3종 세트",
+                desc: "배스로브 2 + 배스타월 1 + 페이스타월 1 구성",
+                options: [
+                    { optName: "화이트 세트", price: 394800, images: ["https://via.placeholder.com/600/f4f7f9/2c3e50?text=Bath_Set_1", "https://via.placeholder.com/600/eef2f5/2c3e50?text=Bath_Set_2"] }
+                ]
+            },
+            {
+                id: "bath_face", name: "[30%] 페이스 타월 단품 세트",
+                desc: "호텔 페이스 타월 3개입 + 기프트 박스",
+                options: [
+                    { optName: "화이트 (3ea)", price: 55300, images: ["https://via.placeholder.com/600/f4f7f9/2c3e50?text=Face_Towel"] }
+                ]
+            }
+        ]
+    },
+    {
+        category: "Signature Scent (30% OFF)",
+        items: [
+            {
+                id: "scent_diff", name: "시그니처 디퓨저 (200ml)",
+                desc: "파르나스 호텔의 향을 담은 프리미엄 디퓨저",
+                options: [
+                    { optName: "Mossy Wood", price: 66500, images: ["https://via.placeholder.com/600/fff/2c3e50?text=Diffuser_Mossy"] },
+                    { optName: "Mint Forest", price: 66500, images: ["https://via.placeholder.com/600/fff/2c3e50?text=Diffuser_Mint"] },
+                    { optName: "White Bloom", price: 66500, images: ["https://via.placeholder.com/600/fff/2c3e50?text=Diffuser_White"] }
+                ]
+            },
+            {
+                id: "scent_candle", name: "시그니처 캔들 (220g)",
+                desc: "아늑한 분위기를 완성하는 호텔 캔들",
+                options: [
+                    { optName: "Mossy Wood", price: 65100, images: ["https://via.placeholder.com/600/fff/2c3e50?text=Candle_Mossy"] },
+                    { optName: "Mint Forest", price: 65100, images: ["https://via.placeholder.com/600/fff/2c3e50?text=Candle_Mint"] }
+                ]
+            }
+        ]
+    }
+];
+
+/* =========================================================
+   2. 초기 렌더링 및 UI 제어
+========================================================= */
+let cart = [];
+let currentItem = null;
+const galleryArea = document.getElementById("shopGallery");
+const detailArea = document.getElementById("detailTemplate");
+
+shopData.forEach(cat => {
+    const catDiv = document.createElement("div");
+    catDiv.innerHTML = `<div class="category-title">${cat.category}</div>`;
+    
+    const listWrapper = document.createElement("div");
+    listWrapper.className = "product-list-wrapper";
+    
+    const list = document.createElement("div");
+    list.className = "product-list";
+    
+    cat.items.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+            <div class="img-container"><img src="${item.options[0].images[0]}" alt="${item.name}"></div>
+            <div class="product-card-title">${item.name}</div>
+            <div style="font-size:0.85em; color:var(--primary); font-weight:700;">${item.options[0].price.toLocaleString()}원~</div>
+        `;
+        card.onclick = () => showDetail(item, catDiv, card);
+        list.appendChild(card);
+    });
+    
+    listWrapper.appendChild(list);
+    catDiv.appendChild(listWrapper);
+    const anchor = document.createElement("div");
+    anchor.className = "detail-anchor";
+    catDiv.appendChild(anchor);
+    galleryArea.appendChild(catDiv);
+});
+
+function showDetail(item, sectionEl, cardEl) {
+    currentItem = item;
+    document.querySelectorAll('.product-card').forEach(c => c.classList.remove('active'));
+    cardEl.classList.add('active');
+
+    document.getElementById("dtlTitle").innerText = item.name;
+    document.getElementById("dtlDesc").innerText = item.desc;
+    
+    const optSel = document.getElementById("dtlOptSelect");
+    optSel.innerHTML = "";
+    item.options.forEach((opt, idx) => {
+        const o = document.createElement("option");
+        o.value = idx;
+        o.text = `${opt.optName} (${opt.price.toLocaleString()}원)`;
+        optSel.appendChild(o);
+    });
+
+    optSel.onchange = () => updateGallery(item.options[optSel.value]);
+    updateGallery(item.options[0]);
+
+    sectionEl.querySelector(".detail-anchor").appendChild(detailArea);
+    detailArea.style.display = "block";
+    updatePrice();
+    
+    detailArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function updateGallery(option) {
+    const mainImg = document.getElementById("dtlMainImg");
+    const thumbList = document.getElementById("dtlThumbList");
+    mainImg.src = option.images[0];
+    thumbList.innerHTML = "";
+    
+    option.images.forEach((src, idx) => {
+        const img = document.createElement("img");
+        img.src = src;
+        img.className = idx === 0 ? "thumb-img active" : "thumb-img";
+        img.onclick = () => {
+            mainImg.src = src;
+            document.querySelectorAll('.thumb-img').forEach(t => t.classList.remove('active'));
+            img.classList.add('active');
+        };
+        thumbList.appendChild(img);
+    });
+}
+
+function changeQty(n) {
+    const input = document.getElementById("dtlQty");
+    let val = parseInt(input.value) + n;
+    if (val < 1) val = 1;
+    input.value = val;
+    updatePrice();
+}
+
+function updatePrice() {
+    const optIdx = document.getElementById("dtlOptSelect").value;
+    const qty = document.getElementById("dtlQty").value;
+    const unitPrice = currentItem.options[optIdx].price;
+    document.getElementById("dtlSubTotal").innerText = (unitPrice * qty).toLocaleString();
+}
+
+/* =========================================================
+   3. 장바구니 및 폼 로직
+========================================================= */
+function addToCart() {
+    const optIdx = document.getElementById("dtlOptSelect").value;
+    const qty = parseInt(document.getElementById("dtlQty").value);
+    const option = currentItem.options[optIdx];
+    
+    const existing = cart.find(c => c.itemId === currentItem.id && c.optName === option.optName);
+    if (existing) {
+        existing.qty += qty;
+    } else {
+        cart.push({
+            itemId: currentItem.id,
+            itemName: currentItem.name,
+            optName: option.optName,
+            price: option.price,
+            qty: qty
+        });
+    }
+    renderCart();
+    alert("장바구니에 상품을 담았습니다.");
+}
+
+function renderCart() {
+    const listEl = document.getElementById("cartList");
+    const totalEl = document.getElementById("grandTotal");
+    if (cart.length === 0) {
+        listEl.innerHTML = `<p style="color:#888;">상품을 선택하여 담아주세요.</p>`;
+        totalEl.innerText = "0";
+        return;
+    }
+    
+    let total = 0;
+    let html = "";
+    cart.forEach((c, idx) => {
+        const sub = c.price * c.qty;
+        total += sub;
+        html += `
+            <div class="cart-item">
+                <div>
+                    <div class="cart-item-title">${c.itemName}</div>
+                    <div style="font-size:0.85em; color:#666;">${c.optName} / ${c.qty}개</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <span class="cart-item-price">${sub.toLocaleString()}원</span>
+                    <button type="button" class="btn-delete" onclick="removeItem(${idx})">×</button>
+                </div>
+            </div>
+        `;
+    });
+    listEl.innerHTML = html;
+    totalEl.innerText = total.toLocaleString();
+    document.getElementById("orderTotal").value = total;
+}
+
+function removeItem(idx) {
+    cart.splice(idx, 1);
+    renderCart();
+}
+
+document.querySelectorAll(".phone-input").forEach(input => {
+    input.oninput = () => input.value = input.value.replace(/\D/g, "");
+});
+
+function validateForm() {
+    if (cart.length === 0) {
+        alert("상품을 하나 이상 담아주세요.");
+        return false;
+    }
+    
+    let summary = cart.map(c => `- ${c.itemName} (${c.optName}) x ${c.qty}개`).join("\n");
+    document.getElementById("orderSummary").value = summary;
+    
+    return confirm("주문서를 제출하시겠습니까?\n\n[주문내역]\n" + summary);
+}
+
+// 초기 장바구니 렌더링
+renderCart();
+</script>
+
+</body>
+</html>
