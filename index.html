@@ -229,10 +229,8 @@
 
         <h2>2. 상품 선택 (Special Offer)</h2>
         
-        <!-- 오퍼 영역 -->
         <div id="individualOffersArea"></div>
 
-        <!-- 폼 연동 장바구니 영역 -->
         <div class="cart-area" id="cartSection">
             <h3 style="margin-top:0; font-size:1.2em; color:#111;">🛒 선택한 상품 내역</h3>
             <div id="cartList"><p style="color:#888; padding: 20px 0;">상품 옵션을 선택하여 추가해 주세요.</p></div>
@@ -293,7 +291,7 @@
 
 <script>
 /* =========================================================
-   1. 데이터 설정
+   1. 데이터 설정 (GitHub images 파일명 적용)
 ========================================================= */
 const mainOffers = [
     {
@@ -304,25 +302,25 @@ const mainOffers = [
         hasMultiOptions: false,
         options: [
             { optName: "King 사이즈", price: 1862400, originPrice: 3104000, images: [
-                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=Full_Set_Img1",
-                "https://via.placeholder.com/800/e9ecef/2c3e50?text=Full_Set_Img2",
-                "https://via.placeholder.com/800/dee2e6/2c3e50?text=Full_Set_Img3",
-                "https://via.placeholder.com/800/ced4da/2c3e50?text=Full_Set_Img4",
-                "https://via.placeholder.com/800/adb5bd/2c3e50?text=Full_Set_Img5"
+                "images/duvetset2.jpg",
+                "images/pillowset2.jpg",
+                "images/bathrobe.jpg",
+                "images/bathtowel.jpg",
+                "images/facetowel.jpg"
             ]},
             { optName: "Queen 사이즈", price: 1820400, originPrice: 3034000, images: [
-                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=Full_Set_Img1",
-                "https://via.placeholder.com/800/e9ecef/2c3e50?text=Full_Set_Img2",
-                "https://via.placeholder.com/800/dee2e6/2c3e50?text=Full_Set_Img3",
-                "https://via.placeholder.com/800/ced4da/2c3e50?text=Full_Set_Img4",
-                "https://via.placeholder.com/800/adb5bd/2c3e50?text=Full_Set_Img5"
+                "images/duvetset2.jpg",
+                "images/pillowset2.jpg",
+                "images/bathrobe.jpg",
+                "images/bathtowel.jpg",
+                "images/facetowel.jpg"
             ]},
             { optName: "Single 사이즈", price: 1652400, originPrice: 2754000, images: [
-                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=Full_Set_Img1",
-                "https://via.placeholder.com/800/e9ecef/2c3e50?text=Full_Set_Img2",
-                "https://via.placeholder.com/800/dee2e6/2c3e50?text=Full_Set_Img3",
-                "https://via.placeholder.com/800/ced4da/2c3e50?text=Full_Set_Img4",
-                "https://via.placeholder.com/800/adb5bd/2c3e50?text=Full_Set_Img5"
+                "images/duvetset2.jpg",
+                "images/pillowset2.jpg",
+                "images/bathrobe.jpg",
+                "images/bathtowel.jpg",
+                "images/facetowel.jpg"
             ]}
         ]
     },
@@ -334,16 +332,16 @@ const mainOffers = [
         hasMultiOptions: false,
         options: [
             { optName: "King 사이즈", price: 1524000, originPrice: 2540000, images: [
-                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=Bedding_Img1",
-                "https://via.placeholder.com/800/e9ecef/2c3e50?text=Bedding_Img2"
+                "images/duvetset.jpg",
+                "images/pillowset.jpg"
             ]},
             { optName: "Queen 사이즈", price: 1482000, originPrice: 2470000, images: [
-                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=Bedding_Img1",
-                "https://via.placeholder.com/800/e9ecef/2c3e50?text=Bedding_Img2"
+                "images/duvetset.jpg",
+                "images/pillowset.jpg"
             ]},
             { optName: "Single 사이즈", price: 1314000, originPrice: 2190000, images: [
-                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=Bedding_Img1",
-                "https://via.placeholder.com/800/e9ecef/2c3e50?text=Bedding_Img2"
+                "images/duvetset.jpg",
+                "images/pillowset.jpg"
             ]}
         ]
     },
@@ -355,9 +353,9 @@ const mainOffers = [
         hasMultiOptions: false,
         options: [
             { optName: "단일옵션", price: 394800, originPrice: 564000, images: [
-                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=Bath_Img1",
-                "https://via.placeholder.com/800/e9ecef/2c3e50?text=Bath_Img2",
-                "https://via.placeholder.com/800/dee2e6/2c3e50?text=Bath_Img3"
+                "images/bathwearset.jpg",
+                "images/bathwearset2.jpg",
+                "images/bathrobe2.jpg"
             ]}
         ]
     },
@@ -370,38 +368,38 @@ const mainOffers = [
         originPrice: 93000,
         price: 65100,
         defaultImages: [
-            "https://via.placeholder.com/800/f8f9fa/2c3e50?text=Scent_Default1",
-            "https://via.placeholder.com/800/e9ecef/2c3e50?text=Scent_Default2",
-            "https://via.placeholder.com/800/dee2e6/2c3e50?text=Scent_Default3"
+            "images/scentset.jpg",
+            "images/scentset2.jpg",
+            "images/scentset3.jpg"
         ],
         option1Name: "제품",
         option1Values: [
             { name: "디퓨저", images: [
-                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=Diffuser_Img1"
+                "images/diffuser.jpg"
             ]},
             { name: "캔들", images: [
-                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=Candle_Img1"
+                "images/candle.jpg"
             ]},
             { name: "룸 스프레이", images: [
-                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=RoomSpray_Img1"
+                "images/roomspray.jpg"
             ]}
         ],
         option2Name: "향",
         option2Values: [
             { name: "Mossy Wood", images: [
-                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=RoomSpray_Img1",
-                "https://via.placeholder.com/800/e9ecef/2c3e50?text=RoomSpray_Img2",
-                "https://via.placeholder.com/800/dee2e6/2c3e50?text=RoomSpray_Img3"
+                "images/icdiffuser.jpg",
+                "images/iccandle.jpg",
+                "images/icroomspray.jpg"
             ]},
             { name: "Mint Forest", images: [
-                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=RoomSpray_Img1",
-                "https://via.placeholder.com/800/e9ecef/2c3e50?text=RoomSpray_Img2",
-                "https://via.placeholder.com/800/dee2e6/2c3e50?text=RoomSpray_Img3"
+                "images/pjdiffuser.jpg",
+                "images/pjcandle.jpg",
+                "images/pjroomspray.jpg"
             ]},
             { name: "White Bloom", images: [
-                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=RoomSpray_Img1",
-                "https://via.placeholder.com/800/e9ecef/2c3e50?text=RoomSpray_Img2",
-                "https://via.placeholder.com/800/dee2e6/2c3e50?text=RoomSpray_Img3"
+                "images/wpdiffuser.jpg",
+                "images/wpcandle.jpg",
+                "images/wproomspray.jpg"
             ]}
         ]
     },
@@ -413,9 +411,9 @@ const mainOffers = [
         hasMultiOptions: false,
         options: [
             { optName: "단일옵션", price: 55300, originPrice: 79000, images: [
-                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=FaceTowel_Img1",
-                "https://via.placeholder.com/800/e9ecef/2c3e50?text=FaceTowel_Img2",
-                "https://via.placeholder.com/800/dee2e6/2c3e50?text=FaceTowel_Img3"
+                "images/facetowel.jpg",
+                "images/facetowel2.jpg",
+                "images/facetowel3.jpg"
             ]}
         ]
     }
@@ -433,12 +431,12 @@ function generatePDPHtml(item, containerIdPrefix) {
     
     // 이중 옵션 상품과 일반 상품 구분 처리
     if (item.hasMultiOptions) {
-        imagesHtml = item.defaultImages.map(src => `<img src="${src}" alt="상품 이미지">`).join('');
+        imagesHtml = item.defaultImages.map(src => `<img src="${src}" alt="상품 이미지" onerror="this.src='https://via.placeholder.com/800/f8f9fa/2c3e50?text=No+Image'">`).join('');
         originPrice = item.originPrice;
         salePrice = item.price;
     } else {
         const defaultOpt = item.options[0];
-        imagesHtml = defaultOpt.images.map(src => `<img src="${src}" alt="상품 이미지">`).join('');
+        imagesHtml = defaultOpt.images.map(src => `<img src="${src}" alt="상품 이미지" onerror="this.src='https://via.placeholder.com/800/f8f9fa/2c3e50?text=No+Image'">`).join('');
         originPrice = defaultOpt.originPrice;
         salePrice = defaultOpt.price;
     }
@@ -563,7 +561,7 @@ function handleMultiOpt1(itemId, prefix) {
     
     if (sel1Value === "") return;
     
-    // 제품 선택 시 3개 이미지로 업데이트
+    // 제품 선택 시 1개 이미지로 업데이트
     updateSlider(prefix, item.option1Values[sel1Value].images);
     
     // 향 옵션 활성화 및 리셋
@@ -583,7 +581,7 @@ function handleMultiOpt2(itemId, prefix) {
     
     if (sel1Value === "" || sel2Value === "") return;
     
-    // 향 선택 완료 시 2개 이미지로 업데이트
+    // 향 선택 완료 시 해당 향의 3개 이미지로 업데이트
     updateSlider(prefix, item.option2Values[sel2Value].images);
     
     const combinedName = `[${item.option1Values[sel1Value].name}] ${item.option2Values[sel2Value].name}`;
@@ -594,7 +592,7 @@ function handleMultiOpt2(itemId, prefix) {
 // ----------------- 공통 UI 업데이트 -----------------
 function updateSlider(prefix, imagesArray) {
     const slider = document.getElementById(`${prefix}_slider`);
-    slider.innerHTML = imagesArray.map(src => `<img src="${src}" alt="상품 이미지">`).join('');
+    slider.innerHTML = imagesArray.map(src => `<img src="${src}" alt="상품 이미지" onerror="this.src='https://via.placeholder.com/800/f8f9fa/2c3e50?text=No+Image'">`).join('');
 }
 
 function showSelectedBox(prefix, optionName, unitPrice) {
