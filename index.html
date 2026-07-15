@@ -51,7 +51,7 @@
     /* 구매 방법 가이드 박스 - 가운데 정렬 */
     .guide-box { 
         margin-top: 25px; padding-top: 25px; border-top: 1px solid #eee; 
-        text-align: center; /* 가운데 정렬 요청 반영 */
+        text-align: center; 
         font-size: 0.95em; color: #444; 
     }
     .guide-box h4 { margin: 15px 0 5px; color: #111; font-size: 1.05em; font-weight: 700; }
@@ -79,22 +79,27 @@
     }
     .pdp-container:last-child { border-bottom: none; margin-bottom: 20px; padding-bottom: 0; }
     
-    /* 좌측 이미지 슬라이드 */
+    /* 좌측 이미지 갤러리 (메인 + 썸네일 구조로 변경) */
     .pdp-left { flex: 1.2; min-width: 0; }
-    .pdp-image-slider {
-        display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
-        gap: 15px; width: 100%; border-radius: 8px;
+    .pdp-gallery { width: 100%; }
+    .pdp-main-image { 
+        width: 100%; aspect-ratio: 1/1; border-radius: 8px; overflow: hidden; 
+        background: #f9f9f9; margin-bottom: 12px; border: 1px solid #eee;
+    }
+    .pdp-main-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    
+    .pdp-thumbnails { 
+        display: flex; gap: 10px; overflow-x: auto; 
         scrollbar-width: none; -ms-overflow-style: none; 
     }
-    .pdp-image-slider::-webkit-scrollbar { display: none; }
-    .pdp-image-slider img {
-        width: 100%; flex-shrink: 0; scroll-snap-align: start;
-        aspect-ratio: 1/1; object-fit: cover; background: #f9f9f9; border-radius: 8px;
+    .pdp-thumbnails::-webkit-scrollbar { display: none; }
+    .pdp-thumb { 
+        width: 64px; height: 64px; border-radius: 6px; object-fit: cover; 
+        cursor: pointer; border: 2px solid transparent; opacity: 0.5; 
+        transition: 0.2s; background: #f9f9f9; flex-shrink: 0;
     }
-    .slider-hint {
-        text-align: center; font-size: 0.85em; color: #999; margin-top: 12px;
-        display: flex; justify-content: center; align-items: center; gap: 8px;
-    }
+    .pdp-thumb:hover { opacity: 0.8; }
+    .pdp-thumb.active { border-color: var(--accent); opacity: 1; }
 
     /* 우측 정보 영역 */
     .pdp-right { flex: 1; display: flex; flex-direction: column; min-width: 0; }
@@ -194,7 +199,7 @@
 
 <div class="page-wrapper">
     <div class="banner">
-        <img src="https://via.placeholder.com/1000x300/C8B598/ffffff?text=Wedding+Promotion+Special+Offer" alt="Wedding Promotion Special Offer">
+        <img src="images/banner.jpg" alt="Wedding Promotion Special Offer">
     </div>
 
     <div class="info-box">
@@ -422,24 +427,29 @@ const mainOffers = [
 let cart = [];
 
 /* =========================================================
-   2. PDP 렌더링 로직
+   2. PDP 렌더링 로직 (메인 + 썸네일 갤러리 방식으로 변경)
 ========================================================= */
 function generatePDPHtml(item, containerIdPrefix) {
-    let imagesHtml = "";
+    let initialImages = [];
     let originPrice = 0;
     let salePrice = 0;
     
-    // 이중 옵션 상품과 일반 상품 구분 처리
+    // 초기 이미지 배열 및 가격 설정
     if (item.hasMultiOptions) {
-        imagesHtml = item.defaultImages.map(src => `<img src="${src}" alt="상품 이미지" onerror="this.src='https://via.placeholder.com/800/f8f9fa/2c3e50?text=No+Image'">`).join('');
+        initialImages = item.defaultImages;
         originPrice = item.originPrice;
         salePrice = item.price;
     } else {
         const defaultOpt = item.options[0];
-        imagesHtml = defaultOpt.images.map(src => `<img src="${src}" alt="상품 이미지" onerror="this.src='https://via.placeholder.com/800/f8f9fa/2c3e50?text=No+Image'">`).join('');
+        initialImages = defaultOpt.images;
         originPrice = defaultOpt.originPrice;
         salePrice = defaultOpt.price;
     }
+
+    // 썸네일 HTML 생성
+    let thumbsHtml = initialImages.map((src, idx) => 
+        `<img src="${src}" class="pdp-thumb ${idx === 0 ? 'active' : ''}" onclick="changeMainImage('${containerIdPrefix}', '${src}', this)" onerror="this.src='https://via.placeholder.com/800/f8f9fa/2c3e50?text=No+Image'">`
+    ).join('');
 
     let optionSection = "";
     
@@ -479,12 +489,13 @@ function generatePDPHtml(item, containerIdPrefix) {
     return `
     <div class="pdp-container" id="${containerIdPrefix}_wrap">
         <div class="pdp-left">
-            <div class="pdp-image-slider" id="${containerIdPrefix}_slider">
-                ${imagesHtml}
-            </div>
-            <div class="slider-hint">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                좌우로 스와이프하여 이미지 확인
+            <div class="pdp-gallery">
+                <div class="pdp-main-image">
+                    <img id="${containerIdPrefix}_mainImg" src="${initialImages[0]}" alt="상품 이미지" onerror="this.src='https://via.placeholder.com/800/f8f9fa/2c3e50?text=No+Image'">
+                </div>
+                <div class="pdp-thumbnails" id="${containerIdPrefix}_thumbs">
+                    ${thumbsHtml}
+                </div>
             </div>
         </div>
         <div class="pdp-right">
@@ -546,7 +557,7 @@ function selectSingleOption(itemId, prefix) {
     
     const option = item.options[selectIdx];
     
-    updateSlider(prefix, option.images);
+    updateGallery(prefix, option.images);
     
     document.getElementById(`${prefix}_origin`).innerText = `${option.originPrice.toLocaleString()}원`;
     document.getElementById(`${prefix}_sale`).innerText = option.price.toLocaleString();
@@ -562,7 +573,7 @@ function handleMultiOpt1(itemId, prefix) {
     if (sel1Value === "") return;
     
     // 제품 선택 시 1개 이미지로 업데이트
-    updateSlider(prefix, item.option1Values[sel1Value].images);
+    updateGallery(prefix, item.option1Values[sel1Value].images);
     
     // 향 옵션 활성화 및 리셋
     const sel2 = document.getElementById(`${prefix}_sel2`);
@@ -581,18 +592,39 @@ function handleMultiOpt2(itemId, prefix) {
     
     if (sel1Value === "" || sel2Value === "") return;
     
-    // 향 선택 완료 시 해당 향의 3개 이미지로 업데이트
-    updateSlider(prefix, item.option2Values[sel2Value].images);
+    // 향 선택 완료 시 해당 향의 이미지들로 업데이트
+    updateGallery(prefix, item.option2Values[sel2Value].images);
     
     const combinedName = `[${item.option1Values[sel1Value].name}] ${item.option2Values[sel2Value].name}`;
     
     showSelectedBox(prefix, combinedName, item.price);
 }
 
-// ----------------- 공통 UI 업데이트 -----------------
-function updateSlider(prefix, imagesArray) {
-    const slider = document.getElementById(`${prefix}_slider`);
-    slider.innerHTML = imagesArray.map(src => `<img src="${src}" alt="상품 이미지" onerror="this.src='https://via.placeholder.com/800/f8f9fa/2c3e50?text=No+Image'">`).join('');
+// ----------------- 공통 UI 업데이트 (메인 + 썸네일) -----------------
+function updateGallery(prefix, imagesArray) {
+    const mainImg = document.getElementById(`${prefix}_mainImg`);
+    const thumbsContainer = document.getElementById(`${prefix}_thumbs`);
+    
+    if(imagesArray && imagesArray.length > 0) {
+        // 첫 번째 이미지를 메인으로 설정
+        mainImg.src = imagesArray[0];
+        
+        // 썸네일 목록 재생성
+        thumbsContainer.innerHTML = imagesArray.map((src, idx) => 
+            `<img src="${src}" class="pdp-thumb ${idx === 0 ? 'active' : ''}" onclick="changeMainImage('${prefix}', '${src}', this)" onerror="this.src='https://via.placeholder.com/800/f8f9fa/2c3e50?text=No+Image'">`
+        ).join('');
+    }
+}
+
+function changeMainImage(prefix, src, thumbEl) {
+    // 큰 이미지 소스 변경
+    document.getElementById(`${prefix}_mainImg`).src = src;
+    
+    // 모든 썸네일의 active 클래스 제거 후, 클릭한 썸네일만 active 추가
+    const thumbsContainer = document.getElementById(`${prefix}_thumbs`);
+    const thumbs = thumbsContainer.querySelectorAll('.pdp-thumb');
+    thumbs.forEach(el => el.classList.remove('active'));
+    thumbEl.classList.add('active');
 }
 
 function showSelectedBox(prefix, optionName, unitPrice) {
@@ -710,7 +742,7 @@ function addCurrentToCart(itemId, prefix) {
         document.getElementById(`${prefix}_sel1`).value = "";
         document.getElementById(`${prefix}_sel2`).value = "";
         document.getElementById(`${prefix}_sel2`).disabled = true;
-        updateSlider(prefix, item.defaultImages);
+        updateGallery(prefix, item.defaultImages);
     } else {
         document.getElementById(`${prefix}_select`).value = "";
     }
