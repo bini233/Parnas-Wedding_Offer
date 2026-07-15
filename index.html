@@ -9,7 +9,7 @@
 <style>
     :root {
         --primary: #2c3e50;
-        --accent: #C8B598; /* 포인트 색상: 고급스러운 베이지 */
+        --accent: #C8B598; /* 포인트 색상: 베이지 */
         --accent-hover: #b5a183;
         --bg-gray: #f8f9fa;
         --border: #e9ecef;
@@ -45,14 +45,14 @@
         background: #fff; border: 1px solid var(--border); border-radius: 8px; 
         line-height: 1.7; 
     }
-    /* 타이틀 검정색으로 변경 */
     .info-head { font-size: 1.5em; font-weight: 800; color: #111; margin-bottom: 10px; }
     .info-item { margin: 5px 0; color: var(--text-sub); }
     
-    /* 구매 방법 가이드 박스 */
+    /* 구매 방법 가이드 박스 - 가운데 정렬 */
     .guide-box { 
         margin-top: 25px; padding-top: 25px; border-top: 1px solid #eee; 
-        text-align: left; font-size: 0.95em; color: #444; 
+        text-align: center; /* 가운데 정렬 요청 반영 */
+        font-size: 0.95em; color: #444; 
     }
     .guide-box h4 { margin: 15px 0 5px; color: #111; font-size: 1.05em; font-weight: 700; }
     .guide-box h4:first-child { margin-top: 0; }
@@ -67,30 +67,30 @@
     input[type="text"], select {
         width: 100%; padding: 12px 10px; border: 1px solid #ddd; border-radius: 6px;
         font-size: 15px; transition: border-color 0.3s; box-sizing: border-box;
+        background-color: #fff;
     }
     input[type="text"]:focus, select:focus { outline: none; border-color: var(--accent); }
+    select:disabled { background-color: #f4f6f8; cursor: not-allowed; }
 
-    /* PDP (Product Detail Page) 컨테이너 */
+    /* PDP 컨테이너 */
     .pdp-container { 
         display: flex; gap: 40px; margin-bottom: 50px; padding-bottom: 40px;
         border-bottom: 1px solid #eee;
     }
     .pdp-container:last-child { border-bottom: none; margin-bottom: 20px; padding-bottom: 0; }
     
-    /* 좌측 이미지 영역 (슬라이드 방식) */
+    /* 좌측 이미지 슬라이드 */
     .pdp-left { flex: 1.2; min-width: 0; }
     .pdp-image-slider {
         display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
         gap: 15px; width: 100%; border-radius: 8px;
-        scrollbar-width: none; -ms-overflow-style: none; /* 스크롤바 숨김 */
+        scrollbar-width: none; -ms-overflow-style: none; 
     }
     .pdp-image-slider::-webkit-scrollbar { display: none; }
-    
     .pdp-image-slider img {
         width: 100%; flex-shrink: 0; scroll-snap-align: start;
         aspect-ratio: 1/1; object-fit: cover; background: #f9f9f9; border-radius: 8px;
     }
-    
     .slider-hint {
         text-align: center; font-size: 0.85em; color: #999; margin-top: 12px;
         display: flex; justify-content: center; align-items: center; gap: 8px;
@@ -112,26 +112,23 @@
     .pdp-info-label { width: 90px; color: #777; flex-shrink: 0; }
     .pdp-info-val { color: #333; flex: 1; }
 
-    .pdp-option-wrap label { font-size: 0.9em; color: #555; margin-bottom: 8px; }
+    .pdp-option-wrap label { font-size: 0.9em; color: #555; margin-bottom: 8px; font-weight:600; }
     
-    /* 선택된 옵션 수량 조절 박스 */
+    /* 선택된 옵션 확인 박스 */
     .pdp-selected-box {
         background: #f8f9fa; border: 1px solid #eee; border-radius: 6px;
         padding: 15px; margin-top: 15px; display: none;
     }
-    .pdp-selected-title { font-size: 0.9em; margin-bottom: 10px; color: #333; }
+    .pdp-selected-title { font-size: 0.9em; margin-bottom: 10px; color: #333; font-weight: 700; }
     .pdp-qty-row { display: flex; justify-content: space-between; align-items: center; }
     .qty-stepper { display: flex; align-items: center; border: 1px solid #ddd; border-radius: 4px; background: #fff; overflow: hidden; }
     .qty-btn { width: 32px; height: 32px; border: none; background: #fff; cursor: pointer; font-size: 1.2em; color: #555; }
-    
-    /* 수량 인풋 타이핑 가능하게 수정 */
     .qty-input { 
         width: 45px; height: 32px; text-align: center; border: none; 
         border-left: 1px solid #ddd; border-right: 1px solid #ddd; 
         padding: 0; font-weight: 600; 
     }
     .qty-input:focus { outline: none; background: #fdfdfd; }
-    /* 숫자 인풋 화살표 숨김 */
     .qty-input::-webkit-outer-spin-button, .qty-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     .qty-input[type=number] { -moz-appearance: textfield; }
     
@@ -141,12 +138,11 @@
     .pdp-total-label { font-size: 1.1em; font-weight: 600; color: #111; }
     .pdp-total-price { font-size: 1.6em; font-weight: 800; color: var(--accent); }
 
-    /* 버튼 그룹 */
     .pdp-btn-group { display: flex; gap: 10px; margin-top: 20px; }
     .btn-action { flex: 1; height: 56px; border: 1px solid var(--accent); background: var(--accent); border-radius: 6px; cursor: pointer; font-size: 1.1em; font-weight: 700; color: #fff; transition: 0.2s; }
     .btn-action:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
 
-    /* 하단 장바구니 리스트 */
+    /* 장바구니 */
     .cart-area { margin-top: 50px; background: #fff; padding: 30px; border-radius: 12px; border: 1px solid #ddd; }
     .cart-item { 
         display: flex; justify-content: space-between; align-items: center; 
@@ -165,7 +161,7 @@
     .total-box-label { font-size: 1.2em; font-weight: 700; }
     .total-box-price { font-size: 1.8em; font-weight: 800; color: var(--accent); }
 
-    /* 개인정보 동의 (2단계) */
+    /* 개인정보 동의 */
     .consent-box { margin-top: 30px; padding: 30px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.9em; line-height: 1.6; background: #fff; }
     .consent-title { font-weight: 800; font-size: 1.2em; color: #111; margin-bottom: 20px; border-bottom: 2px solid #111; padding-bottom: 12px; }
     .consent-section { margin-bottom: 25px; }
@@ -179,7 +175,6 @@
     }
     .consent-check input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
     .consent-check label { margin: 0; cursor: pointer; }
-    
     .consent-note { font-size: 0.95em; color: #d33; font-weight: 600; text-align: center; margin-top: 15px; }
 
     button[type="submit"] {
@@ -207,7 +202,6 @@
         <div class="info-item">기간: ~ 26. 12. 31. (계약일 기준)</div>
         <div class="info-item">문의: <a href="mailto:newbiz@parnas.co.kr" style="color:var(--text-sub);">newbiz@parnas.co.kr</a></div>
         
-        <!-- 수정된 안내문 박스 -->
         <div class="guide-box">
             <h4>구매 방법</h4>
             <p>아래 주문서를 작성 후 제출해주세요.</p>
@@ -235,7 +229,7 @@
 
         <h2>2. 상품 선택 (Special Offer)</h2>
         
-        <!-- 오퍼 3가지 영역 -->
+        <!-- 오퍼 영역 -->
         <div id="individualOffersArea"></div>
 
         <!-- 폼 연동 장바구니 영역 -->
@@ -258,7 +252,6 @@
         <label class="required">수취인 주소</label>
         <input type="text" name="수취인 주소" placeholder="예: 서울시 강남구 테헤란로 521" required>
 
-        <!-- 개인정보 동의 박스 분리 구성 -->
         <div class="consent-box">
             <div class="consent-title">개인정보 동의</div>
             
@@ -304,34 +297,129 @@
 ========================================================= */
 const mainOffers = [
     {
-        id: "wed_full", 
-        name: "40% 베딩&배스웨어 풀세트",
+        id: "item1", 
+        name: "[40% 할인가] 베딩 & 배스웨어 풀 세트",
         discountRate: 40,
-        desc: "이불세트 1 + 베개세트 2 + 배스로브 2 + 타월세트 2 구성",
+        desc: "베딩 세트 + 배스웨어 세트 동시 구매 (사이즈 K/Q/S 정가에서 할인 적용)<br>구성 : 이불 세트 1 + 베개 세트 2 + 배스로브 2 + 배스 타월 세트 1 + 페이스 타월 세트 1",
+        hasMultiOptions: false,
         options: [
-            { optName: "King 사이즈", price: 1862400, images: ["https://via.placeholder.com/800/f8f9fa/2c3e50?text=FullSet_King_Main", "https://via.placeholder.com/800/e9ecef/2c3e50?text=FullSet_King_Sub1", "https://via.placeholder.com/800/dee2e6/2c3e50?text=FullSet_King_Sub2"] },
-            { optName: "Queen 사이즈", price: 1820400, images: ["https://via.placeholder.com/800/f8f9fa/2c3e50?text=FullSet_Queen_Main", "https://via.placeholder.com/800/e9ecef/2c3e50?text=FullSet_Queen_Sub"] },
-            { optName: "Single 사이즈", price: 1652400, images: ["https://via.placeholder.com/800/f8f9fa/2c3e50?text=FullSet_Single_Main"] }
+            { optName: "King 사이즈", price: 1862400, originPrice: 3104000, images: [
+                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=Full_Set_Img1",
+                "https://via.placeholder.com/800/e9ecef/2c3e50?text=Full_Set_Img2",
+                "https://via.placeholder.com/800/dee2e6/2c3e50?text=Full_Set_Img3",
+                "https://via.placeholder.com/800/ced4da/2c3e50?text=Full_Set_Img4",
+                "https://via.placeholder.com/800/adb5bd/2c3e50?text=Full_Set_Img5"
+            ]},
+            { optName: "Queen 사이즈", price: 1820400, originPrice: 3034000, images: [
+                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=Full_Set_Img1",
+                "https://via.placeholder.com/800/e9ecef/2c3e50?text=Full_Set_Img2",
+                "https://via.placeholder.com/800/dee2e6/2c3e50?text=Full_Set_Img3",
+                "https://via.placeholder.com/800/ced4da/2c3e50?text=Full_Set_Img4",
+                "https://via.placeholder.com/800/adb5bd/2c3e50?text=Full_Set_Img5"
+            ]},
+            { optName: "Single 사이즈", price: 1652400, originPrice: 2754000, images: [
+                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=Full_Set_Img1",
+                "https://via.placeholder.com/800/e9ecef/2c3e50?text=Full_Set_Img2",
+                "https://via.placeholder.com/800/dee2e6/2c3e50?text=Full_Set_Img3",
+                "https://via.placeholder.com/800/ced4da/2c3e50?text=Full_Set_Img4",
+                "https://via.placeholder.com/800/adb5bd/2c3e50?text=Full_Set_Img5"
+            ]}
         ]
     },
     {
-        id: "wed_bedding", 
-        name: "40% 구스다운 베딩 세트",
+        id: "item2", 
+        name: "[40%] 베딩 세트",
         discountRate: 40,
-        desc: "구스다운 이불 1 + 구스다운 베개 2 + 커버 세트",
+        desc: "구스다운 이불 세트 + 구스다운 베개 세트 구매 (사이즈 K/Q/S 정가에서 할인 적용)<br>구성 : 이불 세트 1 + 베개 세트 2",
+        hasMultiOptions: false,
         options: [
-            { optName: "King 사이즈", price: 1524000, images: ["https://via.placeholder.com/800/f8f9fa/2c3e50?text=Bedding_King_Main", "https://via.placeholder.com/800/e9ecef/2c3e50?text=Bedding_King_Sub1"] },
-            { optName: "Queen 사이즈", price: 1482000, images: ["https://via.placeholder.com/800/f8f9fa/2c3e50?text=Bedding_Queen_Main"] },
-            { optName: "Single 사이즈", price: 1314000, images: ["https://via.placeholder.com/800/f8f9fa/2c3e50?text=Bedding_Single_Main"] }
+            { optName: "King 사이즈", price: 1524000, originPrice: 2540000, images: [
+                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=Bedding_Img1",
+                "https://via.placeholder.com/800/e9ecef/2c3e50?text=Bedding_Img2"
+            ]},
+            { optName: "Queen 사이즈", price: 1482000, originPrice: 2470000, images: [
+                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=Bedding_Img1",
+                "https://via.placeholder.com/800/e9ecef/2c3e50?text=Bedding_Img2"
+            ]},
+            { optName: "Single 사이즈", price: 1314000, originPrice: 2190000, images: [
+                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=Bedding_Img1",
+                "https://via.placeholder.com/800/e9ecef/2c3e50?text=Bedding_Img2"
+            ]}
         ]
     },
     {
-        id: "bath_set", 
-        name: "30% 배스웨어 3종 세트", 
+        id: "item3", 
+        name: "[30%] 배스웨어 세트", 
         discountRate: 30,
-        desc: "배스로브 2 + 배스타월 1 + 페이스타월 1 구성",
+        desc: "페이스타월 & 배스 타월 & 배스로브 3종 구매<br>구성 : 배스로브 2 + 배스 타월 세트 1 + 페이스 타월 세트 1",
+        hasMultiOptions: false,
         options: [
-            { optName: "화이트 세트", price: 394800, images: ["https://via.placeholder.com/800/f8f9fa/2c3e50?text=Bath_Set_Main", "https://via.placeholder.com/800/e9ecef/2c3e50?text=Bath_Set_Sub1", "https://via.placeholder.com/800/dee2e6/2c3e50?text=Bath_Set_Sub2"] }
+            { optName: "단일옵션", price: 394800, originPrice: 564000, images: [
+                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=Bath_Img1",
+                "https://via.placeholder.com/800/e9ecef/2c3e50?text=Bath_Img2",
+                "https://via.placeholder.com/800/dee2e6/2c3e50?text=Bath_Img3"
+            ]}
+        ]
+    },
+    {
+        id: "item4",
+        name: "[30%] 시그니처 센트류 단품 구매 특가",
+        discountRate: 30,
+        desc: "*대량(50개 이상) 구매 시 추가 할인 협의 가능",
+        hasMultiOptions: true,
+        originPrice: 93000,
+        price: 65100,
+        defaultImages: [
+            "https://via.placeholder.com/800/f8f9fa/2c3e50?text=Scent_Default1",
+            "https://via.placeholder.com/800/e9ecef/2c3e50?text=Scent_Default2",
+            "https://via.placeholder.com/800/dee2e6/2c3e50?text=Scent_Default3"
+        ],
+        option1Name: "제품",
+        option1Values: [
+            { name: "디퓨저", images: [
+                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=Diffuser_Img1",
+                "https://via.placeholder.com/800/e9ecef/2c3e50?text=Diffuser_Img2",
+                "https://via.placeholder.com/800/dee2e6/2c3e50?text=Diffuser_Img3"
+            ]},
+            { name: "캔들", images: [
+                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=Candle_Img1",
+                "https://via.placeholder.com/800/e9ecef/2c3e50?text=Candle_Img2",
+                "https://via.placeholder.com/800/dee2e6/2c3e50?text=Candle_Img3"
+            ]},
+            { name: "룸 스프레이", images: [
+                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=RoomSpray_Img1",
+                "https://via.placeholder.com/800/e9ecef/2c3e50?text=RoomSpray_Img2",
+                "https://via.placeholder.com/800/dee2e6/2c3e50?text=RoomSpray_Img3"
+            ]}
+        ],
+        option2Name: "향",
+        option2Values: [
+            { name: "Mossy Wood", images: [
+                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=MossyWood_Img1",
+                "https://via.placeholder.com/800/e9ecef/2c3e50?text=MossyWood_Img2"
+            ]},
+            { name: "Mint Forest", images: [
+                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=MintForest_Img1",
+                "https://via.placeholder.com/800/e9ecef/2c3e50?text=MintForest_Img2"
+            ]},
+            { name: "White Bloom", images: [
+                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=WhiteBloom_Img1",
+                "https://via.placeholder.com/800/e9ecef/2c3e50?text=WhiteBloom_Img2"
+            ]}
+        ]
+    },
+    {
+        id: "item5", 
+        name: "[30%] 페이스 타월 단품 구매 특가", 
+        discountRate: 30,
+        desc: "*대량(50개 이상) 구매 시 추가 할인 협의 가능<br>구성: 페이스 타월(3개입), 리본 패키지 상자 1개",
+        hasMultiOptions: false,
+        options: [
+            { optName: "단일옵션", price: 55300, originPrice: 79000, images: [
+                "https://via.placeholder.com/800/f8f9fa/2c3e50?text=FaceTowel_Img1",
+                "https://via.placeholder.com/800/e9ecef/2c3e50?text=FaceTowel_Img2",
+                "https://via.placeholder.com/800/dee2e6/2c3e50?text=FaceTowel_Img3"
+            ]}
         ]
     }
 ];
@@ -342,17 +430,56 @@ let cart = [];
    2. PDP 렌더링 로직
 ========================================================= */
 function generatePDPHtml(item, containerIdPrefix) {
-    const defaultOpt = item.options[0];
-    const originPrice = Math.round(defaultOpt.price / (1 - (item.discountRate / 100)));
+    let imagesHtml = "";
+    let originPrice = 0;
+    let salePrice = 0;
     
-    // 이미지 슬라이더 생성
-    let imagesHtml = defaultOpt.images.map(src => 
-        `<img src="${src}" alt="상품 이미지">`
-    ).join('');
+    // 이중 옵션 상품과 일반 상품 구분 처리
+    if (item.hasMultiOptions) {
+        imagesHtml = item.defaultImages.map(src => `<img src="${src}" alt="상품 이미지">`).join('');
+        originPrice = item.originPrice;
+        salePrice = item.price;
+    } else {
+        const defaultOpt = item.options[0];
+        imagesHtml = defaultOpt.images.map(src => `<img src="${src}" alt="상품 이미지">`).join('');
+        originPrice = defaultOpt.originPrice;
+        salePrice = defaultOpt.price;
+    }
 
-    let optionsHtml = item.options.map((opt, idx) => 
-        `<option value="${idx}">${opt.optName}</option>`
-    ).join('');
+    let optionSection = "";
+    
+    if (item.hasMultiOptions) {
+        let opt1List = item.option1Values.map((opt, idx) => `<option value="${idx}">${opt.name}</option>`).join('');
+        let opt2List = item.option2Values.map((opt, idx) => `<option value="${idx}">${opt.name}</option>`).join('');
+        
+        optionSection = `
+            <div class="pdp-option-wrap">
+                <label>${item.option1Name}</label>
+                <select id="${containerIdPrefix}_sel1" onchange="handleMultiOpt1('${item.id}', '${containerIdPrefix}')">
+                    <option value="" disabled selected>- [필수] ${item.option1Name}을(를) 선택해 주세요 -</option>
+                    ${opt1List}
+                </select>
+            </div>
+            <div class="pdp-option-wrap" style="margin-top: 15px;">
+                <label>${item.option2Name}</label>
+                <select id="${containerIdPrefix}_sel2" disabled onchange="handleMultiOpt2('${item.id}', '${containerIdPrefix}')">
+                    <option value="" disabled selected>- [필수] ${item.option2Name}을(를) 선택해 주세요 -</option>
+                    ${opt2List}
+                </select>
+            </div>
+        `;
+    } else {
+        let optList = item.options.map((opt, idx) => `<option value="${idx}">${opt.optName}</option>`).join('');
+        optionSection = `
+            <div class="pdp-option-wrap">
+                <label>옵션</label>
+                <select id="${containerIdPrefix}_select" onchange="selectSingleOption('${item.id}', '${containerIdPrefix}')">
+                    <option value="" disabled selected>- [필수] 옵션을 선택해 주세요 -</option>
+                    ${optList}
+                </select>
+            </div>
+        `;
+    }
 
     return `
     <div class="pdp-container" id="${containerIdPrefix}_wrap">
@@ -372,7 +499,7 @@ function generatePDPHtml(item, containerIdPrefix) {
                 <div class="pdp-origin-price" id="${containerIdPrefix}_origin">${originPrice.toLocaleString()}원</div>
                 <div class="pdp-sale-price">
                     <span class="pdp-discount">${item.discountRate}%</span> 
-                    <span id="${containerIdPrefix}_sale">${defaultOpt.price.toLocaleString()}</span>원
+                    <span id="${containerIdPrefix}_sale">${salePrice.toLocaleString()}</span>원
                 </div>
             </div>
             
@@ -389,20 +516,13 @@ function generatePDPHtml(item, containerIdPrefix) {
 
             <div class="pdp-divider" style="margin: 15px 0;"></div>
             
-            <div class="pdp-option-wrap">
-                <label>옵션</label>
-                <select id="${containerIdPrefix}_select" onchange="selectOption('${item.id}', '${containerIdPrefix}')">
-                    <option value="" disabled selected>- [필수] 옵션을 선택해 주세요 -</option>
-                    ${optionsHtml}
-                </select>
-            </div>
+            ${optionSection}
 
             <div class="pdp-selected-box" id="${containerIdPrefix}_selectedBox">
                 <div class="pdp-selected-title" id="${containerIdPrefix}_selectedName">옵션명</div>
                 <div class="pdp-qty-row">
                     <div class="qty-stepper">
                         <button type="button" class="qty-btn" onclick="changeQty('${containerIdPrefix}', -1)">-</button>
-                        <!-- oninput을 통한 직접 입력 허용 -->
                         <input type="number" id="${containerIdPrefix}_qty" class="qty-input" value="1" oninput="updateQtyDirectly('${containerIdPrefix}')">
                         <button type="button" class="qty-btn" onclick="changeQty('${containerIdPrefix}', 1)">+</button>
                     </div>
@@ -423,34 +543,72 @@ function generatePDPHtml(item, containerIdPrefix) {
     `;
 }
 
-function selectOption(itemId, prefix) {
+// ----------------- 단일 옵션 제어 -----------------
+function selectSingleOption(itemId, prefix) {
     const item = mainOffers.find(i => i.id === itemId);
     const selectIdx = document.getElementById(`${prefix}_select`).value;
     if (selectIdx === "") return;
     
     const option = item.options[selectIdx];
-    const originPrice = Math.round(option.price / (1 - (item.discountRate / 100)));
     
-    // 슬라이더 이미지 업데이트
-    const slider = document.getElementById(`${prefix}_slider`);
-    slider.innerHTML = option.images.map(src => 
-        `<img src="${src}" alt="상품 이미지">`
-    ).join('');
+    updateSlider(prefix, option.images);
     
-    // 가격 텍스트 업데이트
-    document.getElementById(`${prefix}_origin`).innerText = `${originPrice.toLocaleString()}원`;
+    document.getElementById(`${prefix}_origin`).innerText = `${option.originPrice.toLocaleString()}원`;
     document.getElementById(`${prefix}_sale`).innerText = option.price.toLocaleString();
     
-    // 선택 박스 활성화
-    const box = document.getElementById(`${prefix}_selectedBox`);
-    box.style.display = 'block';
-    document.getElementById(`${prefix}_selectedName`).innerText = option.optName;
-    document.getElementById(`${prefix}_qty`).value = 1;
-    
-    updatePDPPrice(prefix, option.price);
+    showSelectedBox(prefix, option.optName, option.price);
 }
 
-// 버튼을 통한 수량 증감
+// ----------------- 이중 옵션 제어 -----------------
+function handleMultiOpt1(itemId, prefix) {
+    const item = mainOffers.find(i => i.id === itemId);
+    const sel1Value = document.getElementById(`${prefix}_sel1`).value;
+    
+    if (sel1Value === "") return;
+    
+    // 제품 선택 시 3개 이미지로 업데이트
+    updateSlider(prefix, item.option1Values[sel1Value].images);
+    
+    // 향 옵션 활성화 및 리셋
+    const sel2 = document.getElementById(`${prefix}_sel2`);
+    sel2.disabled = false;
+    sel2.value = "";
+    
+    // 선택 박스 숨김 처리 (향까지 선택해야 활성화됨)
+    document.getElementById(`${prefix}_selectedBox`).style.display = 'none';
+    document.getElementById(`${prefix}_grand`).innerText = '0';
+}
+
+function handleMultiOpt2(itemId, prefix) {
+    const item = mainOffers.find(i => i.id === itemId);
+    const sel1Value = document.getElementById(`${prefix}_sel1`).value;
+    const sel2Value = document.getElementById(`${prefix}_sel2`).value;
+    
+    if (sel1Value === "" || sel2Value === "") return;
+    
+    // 향 선택 완료 시 2개 이미지로 업데이트
+    updateSlider(prefix, item.option2Values[sel2Value].images);
+    
+    const combinedName = `[${item.option1Values[sel1Value].name}] ${item.option2Values[sel2Value].name}`;
+    
+    showSelectedBox(prefix, combinedName, item.price);
+}
+
+// ----------------- 공통 UI 업데이트 -----------------
+function updateSlider(prefix, imagesArray) {
+    const slider = document.getElementById(`${prefix}_slider`);
+    slider.innerHTML = imagesArray.map(src => `<img src="${src}" alt="상품 이미지">`).join('');
+}
+
+function showSelectedBox(prefix, optionName, unitPrice) {
+    const box = document.getElementById(`${prefix}_selectedBox`);
+    box.style.display = 'block';
+    document.getElementById(`${prefix}_selectedName`).innerText = optionName;
+    document.getElementById(`${prefix}_qty`).value = 1;
+    
+    updatePDPPrice(prefix, unitPrice, 1);
+}
+
 function changeQty(prefix, amount) {
     const input = document.getElementById(`${prefix}_qty`);
     let val = parseInt(input.value) || 1;
@@ -461,35 +619,34 @@ function changeQty(prefix, amount) {
     recalculatePriceFromInput(prefix);
 }
 
-// 직접 타이핑할 때의 처리
 function updateQtyDirectly(prefix) {
-    const input = document.getElementById(`${prefix}_qty`);
-    let val = parseInt(input.value);
-    
-    if (isNaN(val) || val < 1) {
-        // 일시적으로 비워둘 수는 있게 하되, 계산 시에는 1로 간주하거나 빈값 허용 후 나중에 잡기
-        // UX 상 빈값을 허용하고, 포커스가 빠질 때 1로 강제하는 것이 자연스럽지만
-        // 즉각적인 가격 계산을 위해 1 미만이면 무조건 1로 강제할 수도 있습니다.
-        // 여기선 빈 칸 입력을 허용하되 계산시 1로 처리하겠습니다.
-    }
     recalculatePriceFromInput(prefix);
 }
 
 function recalculatePriceFromInput(prefix) {
     const itemId = prefix.split('_pdp')[0]; 
-    const selectIdx = document.getElementById(`${prefix}_select`).value;
-    if (selectIdx === "") return;
-
     const item = mainOffers.find(i => i.id === itemId);
+    let unitPrice = 0;
+
+    if (item.hasMultiOptions) {
+        const sel1 = document.getElementById(`${prefix}_sel1`).value;
+        const sel2 = document.getElementById(`${prefix}_sel2`).value;
+        if (sel1 === "" || sel2 === "") return;
+        unitPrice = item.price;
+    } else {
+        const selectIdx = document.getElementById(`${prefix}_select`).value;
+        if (selectIdx === "") return;
+        unitPrice = item.options[selectIdx].price;
+    }
+
     const input = document.getElementById(`${prefix}_qty`);
-    let val = parseInt(input.value) || 1; // 빈칸이거나 문자가 들어가면 1로 계산
+    let val = parseInt(input.value) || 1;
     
-    updatePDPPrice(prefix, item.options[selectIdx].price, val);
+    updatePDPPrice(prefix, unitPrice, val);
 }
 
 function updatePDPPrice(prefix, unitPrice, qtyValue) {
-    let qty = qtyValue !== undefined ? qtyValue : (parseInt(document.getElementById(`${prefix}_qty`).value) || 1);
-    const total = unitPrice * qty;
+    const total = unitPrice * qtyValue;
     document.getElementById(`${prefix}_subtotal`).innerText = total.toLocaleString();
     document.getElementById(`${prefix}_grand`).innerText = total.toLocaleString();
 }
@@ -506,46 +663,62 @@ mainOffers.forEach(item => {
    4. 장바구니 및 폼 로직
 ========================================================= */
 function addCurrentToCart(itemId, prefix) {
-    const selectEl = document.getElementById(`${prefix}_select`);
-    const selectIdx = selectEl.value;
-    
-    if (selectIdx === "") {
-        alert("옵션을 먼저 선택해 주세요.");
-        selectEl.focus();
-        return;
+    const item = mainOffers.find(i => i.id === itemId);
+    let optName = "";
+    let finalPrice = 0;
+
+    if (item.hasMultiOptions) {
+        const sel1 = document.getElementById(`${prefix}_sel1`);
+        const sel2 = document.getElementById(`${prefix}_sel2`);
+        if (sel1.value === "" || sel2.value === "") {
+            alert("필수 옵션을 모두 선택해 주세요.");
+            return;
+        }
+        optName = `[${item.option1Values[sel1.value].name}] ${item.option2Values[sel2.value].name}`;
+        finalPrice = item.price;
+    } else {
+        const sel = document.getElementById(`${prefix}_select`);
+        if (sel.value === "") {
+            alert("필수 옵션을 선택해 주세요.");
+            sel.focus();
+            return;
+        }
+        optName = item.options[sel.value].optName;
+        finalPrice = item.options[sel.value].price;
     }
 
-    const item = mainOffers.find(i => i.id === itemId);
-    const option = item.options[selectIdx];
-    
     const qtyInput = document.getElementById(`${prefix}_qty`);
     let qty = parseInt(qtyInput.value);
-    // 빈칸이거나 1 미만인 경우 방어코드
     if (isNaN(qty) || qty < 1) {
         qty = 1;
         qtyInput.value = 1;
     }
 
-    const existing = cart.find(c => c.itemId === item.id && c.optName === option.optName);
+    const existing = cart.find(c => c.itemId === item.id && c.optName === optName);
     if (existing) {
         existing.qty += qty;
     } else {
         cart.push({
             itemId: item.id,
             itemName: item.name,
-            optName: option.optName,
-            price: option.price,
+            optName: optName,
+            price: finalPrice,
             qty: qty
         });
     }
     
     renderCart();
-    
-    // 추가 후 하단 장바구니 영역으로 스크롤 이동
     document.getElementById("cartSection").scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-    // 선택 초기화
-    selectEl.value = "";
+    // UI 리셋
+    if (item.hasMultiOptions) {
+        document.getElementById(`${prefix}_sel1`).value = "";
+        document.getElementById(`${prefix}_sel2`).value = "";
+        document.getElementById(`${prefix}_sel2`).disabled = true;
+        updateSlider(prefix, item.defaultImages);
+    } else {
+        document.getElementById(`${prefix}_select`).value = "";
+    }
     document.getElementById(`${prefix}_selectedBox`).style.display = 'none';
     document.getElementById(`${prefix}_grand`).innerText = '0';
 }
