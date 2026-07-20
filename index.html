@@ -9,7 +9,7 @@
 <style>
     :root {
         --primary: #2c3e50;
-        --accent: #C8B598; /* 포인트 색상: 베이지 */
+        --accent: #C8B598;
         --accent-hover: #b5a183;
         --bg-gray: #f8f9fa;
         --border: #e9ecef;
@@ -36,7 +36,6 @@
         box-shadow: 0 10px 40px rgba(0,0,0,0.05);
     }
 
-    /* 상단 안내 */
     .banner { width: 100%; border-radius: 10px; margin-bottom: 25px; overflow: hidden; }
     .banner img { width: 100%; height: auto; display: block; }
 
@@ -48,7 +47,6 @@
     .info-head { font-size: 1.5em; font-weight: 800; color: #111; margin-bottom: 10px; }
     .info-item { margin: 5px 0; color: var(--text-sub); }
     
-    /* 구매 방법 가이드 박스 - 가운데 정렬 */
     .guide-box { 
         margin-top: 25px; padding-top: 25px; border-top: 1px solid #eee; 
         text-align: center; 
@@ -59,7 +57,6 @@
     .guide-box p { margin: 0 0 15px; line-height: 1.6; }
     .guide-box p:last-child { margin-bottom: 0; }
 
-    /* 공통 폼 스타일 */
     h2 { margin-top: 50px; font-size: 1.3em; border-left: 4px solid var(--accent); padding-left: 12px; color: #111; }
     label { display: block; font-weight: 600; margin: 18px 0 8px; color: #333; }
     label.required::after { content: " *"; color: #d33; }
@@ -72,14 +69,12 @@
     input[type="text"]:focus, select:focus { outline: none; border-color: var(--accent); }
     select:disabled { background-color: #f4f6f8; cursor: not-allowed; }
 
-    /* PDP 컨테이너 */
     .pdp-container { 
         display: flex; gap: 40px; margin-bottom: 50px; padding-bottom: 40px;
         border-bottom: 1px solid #eee;
     }
     .pdp-container:last-child { border-bottom: none; margin-bottom: 20px; padding-bottom: 0; }
     
-    /* 좌측 이미지 갤러리 */
     .pdp-left { flex: 1.2; min-width: 0; }
     .pdp-gallery { width: 100%; }
     .pdp-main-image { 
@@ -101,7 +96,6 @@
     .pdp-thumb:hover { opacity: 0.8; }
     .pdp-thumb.active { border-color: var(--accent); opacity: 1; }
 
-    /* 우측 정보 영역 */
     .pdp-right { flex: 1; display: flex; flex-direction: column; min-width: 0; }
     .pdp-title { font-size: 1.4em; font-weight: 700; margin-bottom: 15px; color: #111; word-break: keep-all; }
     .pdp-desc { font-size: 0.95em; color: var(--text-sub); margin-bottom: 20px; line-height: 1.5; }
@@ -119,7 +113,6 @@
 
     .pdp-option-wrap label { font-size: 0.9em; color: #555; margin-bottom: 8px; font-weight:600; }
     
-    /* 선택된 옵션 확인 박스 */
     .pdp-selected-box {
         background: #f8f9fa; border: 1px solid #eee; border-radius: 6px;
         padding: 15px; margin-top: 15px;
@@ -147,7 +140,6 @@
     .btn-action { flex: 1; height: 56px; border: 1px solid var(--accent); background: var(--accent); border-radius: 6px; cursor: pointer; font-size: 1.1em; font-weight: 700; color: #fff; transition: 0.2s; }
     .btn-action:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
 
-    /* 장바구니 */
     .cart-area { margin-top: 50px; background: #fff; padding: 30px; border-radius: 12px; border: 1px solid #ddd; }
     .cart-item { 
         display: flex; justify-content: space-between; align-items: center; 
@@ -166,7 +158,6 @@
     .total-box-label { font-size: 1.2em; font-weight: 700; }
     .total-box-price { font-size: 1.8em; font-weight: 800; color: var(--accent); }
 
-    /* 개인정보 동의 */
     .consent-box { margin-top: 30px; padding: 30px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.9em; line-height: 1.6; background: #fff; }
     .consent-title { font-weight: 800; font-size: 1.2em; color: #111; margin-bottom: 20px; border-bottom: 2px solid #111; padding-bottom: 12px; }
     .consent-section { margin-bottom: 25px; }
@@ -353,16 +344,17 @@ const mainOffers = [
         discountRate: 30,
         desc: "*대량(50개 이상) 구매 시 추가 할인 협의 가능",
         hasMultiOptions: true,
-        originPrice: 93000,
-        price: 65100,
+        originPrice: 88000, /* 미선택 시 기본 노출될 가장 낮은 가격 셋팅 */
+        price: 61600,       
         defaultImages: [
             "images/scentset.jpg", "images/scentset2.jpg", "images/scentset3.jpg"
         ],
         option1Name: "제품",
         option1Values: [
-            { name: "디퓨저", images: ["images/diffuser.jpg"] },
-            { name: "캔들", images: ["images/candle.jpg"] },
-            { name: "룸 스프레이", images: ["images/roomspray.jpg"] }
+            // 💡 각 제품별 개별 가격 정보 추가
+            { name: "디퓨저", price: 66500, originPrice: 95000, images: ["images/diffuser.jpg"] },
+            { name: "캔들", price: 65100, originPrice: 93000, images: ["images/candle.jpg"] },
+            { name: "룸 스프레이", price: 61600, originPrice: 88000, images: ["images/roomspray.jpg"] }
         ],
         option2Name: "향",
         option2Values: [
@@ -545,8 +537,14 @@ function handleMultiOpt1(itemId, prefix) {
     
     if (sel1Value === "") return;
     
-    // 제품 선택 시 1개 이미지로 업데이트
-    updateGallery(prefix, item.option1Values[sel1Value].images);
+    const selectedProduct = item.option1Values[sel1Value];
+
+    // 💡 1. 메인 이미지 영역 업데이트
+    updateGallery(prefix, selectedProduct.images);
+    
+    // 💡 2. 제품 선택 시 메인 가격 표시줄 즉시 업데이트
+    document.getElementById(`${prefix}_origin`).innerText = `${selectedProduct.originPrice.toLocaleString()}원`;
+    document.getElementById(`${prefix}_sale`).innerText = selectedProduct.price.toLocaleString();
     
     // 향 옵션 활성화 및 리셋
     const sel2 = document.getElementById(`${prefix}_sel2`);
@@ -560,17 +558,20 @@ function handleMultiOpt1(itemId, prefix) {
 
 function handleMultiOpt2(itemId, prefix) {
     const item = mainOffers.find(i => i.id === itemId);
-    const sel1Value = document.getElementById(`${prefix}_sel1`).value;
-    const sel2Value = document.getElementById(`${prefix}_sel2`).value;
+    const sel1Value = document.getElementById(`${prefix}_sel1`).value; // 선택된 제품 인덱스
+    const sel2Value = document.getElementById(`${prefix}_sel2`).value; // 선택된 향 인덱스
     
     if (sel1Value === "" || sel2Value === "") return;
     
-    // 향 선택 완료 시 해당 향의 이미지들로 업데이트
-    updateGallery(prefix, item.option2Values[sel2Value].images);
+    // 선택한 향(sel2Value)의 이미지 배열 중, 선택한 제품(sel1Value)의 순서에 맞는 이미지 1장만 추출
+    const exactImage = item.option2Values[sel2Value].images[sel1Value];
+    updateGallery(prefix, [exactImage]);
     
     const combinedName = `[${item.option1Values[sel1Value].name}] ${item.option2Values[sel2Value].name}`;
     
-    showSelectedBox(prefix, combinedName, item.price);
+    // 💡 선택된 제품의 가격을 정확히 전달
+    const unitPrice = item.option1Values[sel1Value].price;
+    showSelectedBox(prefix, combinedName, unitPrice);
 }
 
 // ----------------- 공통 UI 업데이트 -----------------
@@ -630,7 +631,9 @@ function recalculatePriceFromInput(prefix) {
         const sel1 = document.getElementById(`${prefix}_sel1`).value;
         const sel2 = document.getElementById(`${prefix}_sel2`).value;
         if (sel1 === "" || sel2 === "") return;
-        unitPrice = item.price;
+        
+        // 💡 수량 변경 시 선택된 제품의 가격 기준으로 재계산
+        unitPrice = item.option1Values[sel1].price;
     } else if (item.options.length > 1) {
         const selectIdx = document.getElementById(`${prefix}_select`).value;
         if (selectIdx === "") return;
@@ -676,7 +679,9 @@ function addCurrentToCart(itemId, prefix) {
             return;
         }
         optName = `[${item.option1Values[sel1.value].name}] ${item.option2Values[sel2.value].name}`;
-        finalPrice = item.price;
+        
+        // 💡 장바구니에 담을 때 선택된 제품의 가격 담기
+        finalPrice = item.option1Values[sel1.value].price;
     } else if (item.options.length > 1) {
         const sel = document.getElementById(`${prefix}_select`);
         if (sel.value === "") {
@@ -721,6 +726,11 @@ function addCurrentToCart(itemId, prefix) {
         document.getElementById(`${prefix}_sel2`).value = "";
         document.getElementById(`${prefix}_sel2`).disabled = true;
         updateGallery(prefix, item.defaultImages);
+        
+        // 💡 리셋 시 노출 가격도 기본(최저가)으로 초기화
+        document.getElementById(`${prefix}_origin`).innerText = `${item.originPrice.toLocaleString()}원`;
+        document.getElementById(`${prefix}_sale`).innerText = item.price.toLocaleString();
+        
         document.getElementById(`${prefix}_selectedBox`).style.display = 'none';
         document.getElementById(`${prefix}_grand`).innerText = '0';
     } else if (item.options.length > 1) {
