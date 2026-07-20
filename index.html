@@ -719,8 +719,14 @@ function addCurrentToCart(itemId, prefix) {
         });
     }
     
+    // 장바구니 렌더링 업데이트
     renderCart();
-    document.getElementById("cartSection").scrollIntoView({ behavior: 'smooth', block: 'center' });
+    
+    // 💡 이 부분이 화면을 아래로 끌어내리던 원인입니다. (삭제 또는 주석 처리)
+    // document.getElementById("cartSection").scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    // 💡 화면이 이동하지 않는 대신, 추가되었다는 알림창을 띄워줍니다. (원치 않으시면 지우셔도 됩니다)
+    alert("선택하신 상품이 추가되었습니다. 아래쪽 장바구니 내역을 확인해주세요.");
 
     // UI 리셋 로직
     if (item.hasMultiOptions) {
@@ -729,7 +735,6 @@ function addCurrentToCart(itemId, prefix) {
         document.getElementById(`${prefix}_sel2`).disabled = true;
         updateGallery(prefix, item.defaultImages);
         
-        // 💡 리셋 시 다시 최저가에 '~' 기호를 붙여 복구
         document.getElementById(`${prefix}_origin`).innerText = `${item.originPrice.toLocaleString()}~원`;
         document.getElementById(`${prefix}_sale`).innerText = `${item.price.toLocaleString()}~`;
         
@@ -738,7 +743,6 @@ function addCurrentToCart(itemId, prefix) {
     } else if (item.options.length > 1) {
         document.getElementById(`${prefix}_select`).value = "";
         
-        // 💡 일반 옵션 상품도 가격 차이가 있다면 리셋 시 최저가~ 로 복구
         const prices = item.options.map(opt => opt.price);
         const minP = Math.min(...prices);
         const maxP = Math.max(...prices);
